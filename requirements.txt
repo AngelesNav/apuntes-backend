@@ -1,1 +1,4 @@
-pip freeze > requirements.txt
+Flask==2.0.2
+Flask-Cors==3.0.10
+Flask-Migrate==3.0.1
+Flask-SQLAlchemy==2.5.1
