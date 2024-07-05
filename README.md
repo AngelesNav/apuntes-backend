@@ -58,7 +58,7 @@ Este proyecto es una aplicación de apuntes en línea con un backend basado en F
 1. Ejecuta la aplicación:
 
     ```bash
-    flask run
+    python app.py
     ```
 
 2. La aplicación estará disponible en `http://127.0.0.1:5000`.
