@@ -40,6 +40,10 @@ class Favorite(db.Model):
     user = db.relationship('User', backref=db.backref('favorites', lazy=True))
     file = db.relationship('File', backref=db.backref('favorites', lazy=True))
 
+@app.route('/api/saludo', methods=['GET'])
+def saludo():
+    return jsonify({"mensaje": "¡Hola desde el backend!"})
+
 @app.before_request
 def log_request_info():
     app.logger.debug('Headers: %s', request.headers)
@@ -161,4 +165,6 @@ def get_user_files(user_id):
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
     app.run(debug=True)
