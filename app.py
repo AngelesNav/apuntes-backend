@@ -4,8 +4,6 @@ from flask_cors import CORS
 from flask_migrate import Migrate
 import os
 from werkzeug.security import generate_password_hash, check_password_hash
-from google.oauth2 import id_token
-from google.auth.transport import requests
 
 app = Flask(__name__)
 CORS(app)
@@ -58,27 +56,6 @@ def authenticate_user():
     if user and check_password_hash(user.password, password):
         return jsonify({"id": user.id, "first_name": user.first_name, "last_name": user.last_name})
     return jsonify({"error": "Invalid email or password"}), 401
-
-@app.route('/users/google-login', methods=['POST'])
-def google_login():
-    data = request.json
-    token = data.get('token')
-    try:
-        idinfo = id_token.verify_oauth2_token(token, requests.Request(), "367342764631-tejhut1n7n3mls174d2ffmq86cdmf1ui.apps.googleusercontent.com")
-
-        email = idinfo['email']
-        first_name = idinfo['given_name']
-        last_name = idinfo['family_name']
-
-        user = User.query.filter_by(email=email).first()
-        if not user:
-            user = User(email=email, first_name=first_name, last_name=last_name)
-            db.session.add(user)
-            db.session.commit()
-
-        return jsonify({"id": user.id, "first_name": user.first_name, "last_name": user.last_name})
-    except ValueError:
-        return jsonify({"error": "Invalid token"}), 400
 
 @app.route('/users/register', methods=['POST'])
 def register_user():
